@@ -1,0 +1,64 @@
+SELECT *
+FROM [NYPD_Arrest_2022].[dbo].[Precincts]
+-------------------------------------------------------------------------------------
+
+
+-- Exploring ofns_desc column
+
+SELECT   [OFNS_DESC],  count([ARREST_KEY]) as num_of_arrests
+FROM [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+GROUP BY   [OFNS_DESC]
+ 
+-- trying to understand null values
+
+SELECT   *  
+FROM [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+WHERE  [OFNS_DESC] = '(null)' 
+-----------------------------------------------------------------------------------
+
+
+-- changing ARREST_DATE coulmn to Standardize Date Format
+
+Select ARREST_DATE, CONVERT(Date,ARREST_DATE)
+FROM [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+
+ALTER TABLE [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022]
+Add ArrestDateConverted Date;
+
+Update [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+SET ArrestDateConverted = CONVERT(Date,ARREST_DATE)
+
+select *
+from [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+
+------------------------------------------------------------------------------------
+-- Adding new WEEK_DAY name column  
+
+Select ARREST_DATE, DATENAME(WEEKDAY, ARREST_DATE)
+FROM [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022]
+
+ALTER TABLE [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022]
+Add WEEK_DAY char(10);
+
+Update [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+SET WEEK_DAY = DATENAME(WEEKDAY, ARREST_DATE)
+
+select *
+from [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+
+----------------------------------------------------------------------------------------
+-- Adding new ARREST_MONTH column
+
+Select ARREST_DATE, MONTH([ARREST_DATE])
+FROM [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022]
+
+ALTER TABLE [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022]
+Add ARREST_MONTH int;
+
+Update [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+SET ARREST_MONTH = MONTH([ARREST_DATE])
+
+select *
+from [NYPD_Arrest_2022].[dbo].[NYPD_Arrest_Data__2022] 
+
+
